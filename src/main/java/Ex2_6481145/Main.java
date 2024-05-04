@@ -11,7 +11,7 @@ public class Main {
         int inputCitySize = keyboardInput.nextInt();
 
         try {
-            File inputFile = new File("src/main/java/Ex2_6481145/provinces.txt");
+            File inputFile = new File("Ex2_6481145/provinces.txt");
             File outputFile = new File("src/main/java/Ex2_6481145/output.txt");
 
             System.out.println("Read provinces size from " + inputFile.getPath());
