@@ -18,12 +18,10 @@ public class Main {
                     String[] lapTime = cols[5].split(":");
                     double lapTimeMS = Double.parseDouble(lapTime[0])*60000 + Double.parseDouble(lapTime[1])*1000;
                     double distance = Double.parseDouble(cols[4]);
-                    double speed = (3600000*distance)/lapTimeMS;
-                    races[idx] = new MotorRacing(cols[1].trim(), cols[2].trim(), Integer.parseInt(cols[3].trim()), distance, cols[5] ,lapTimeMS, speed);
+                    races[idx] = new MotorRacing(cols[1].trim(), cols[2].trim(), Integer.parseInt(cols[3].trim()), distance, cols[5]);
                 }
                 else if(cols[0].equals("h")) {
-                    double distanceFurlong = Double.parseDouble(cols[4].trim());
-                    races[idx] = new HorseRacing(cols[1].trim(), cols[2].trim(), Integer.parseInt(cols[3].trim()), distanceFurlong, distanceFurlong/5);
+                    races[idx] = new HorseRacing(cols[1].trim(), cols[2].trim(), Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim()));
                 }
                 idx++;
             }
@@ -63,10 +61,10 @@ class Racing {
 class HorseRacing extends Racing{
     protected double distanceFurlong, distanceKM;
     protected int age;
-    HorseRacing(String nm, String vn, int age, double distanceFurlong, double distanceKM){
+    HorseRacing(String nm, String vn, int age, double distanceFurlong){
         super(nm, vn);
         this.distanceFurlong = distanceFurlong;
-        this.distanceKM = distanceKM;
+        this.distanceKM = this.distanceFurlong/5;
         this.age = age;
     }
 
@@ -85,15 +83,15 @@ class MotorRacing extends Racing{
     protected double lapLength, lapTimeMS, speed;
     protected int year;
     protected String lapTime;
-    MotorRacing(String nm, String vn, int year, double lapLength, String lapTime, double lapTimeMS, double speed){
+    MotorRacing(String nm, String vn, int year, double lapLength, String lapTime){
         super(nm, vn);
         this.lapLength = lapLength;
         this.lapTime = lapTime;
-        this.lapTimeMS = lapTimeMS;
-        this.speed = speed;
+        String [] lapTimeMinSec = lapTime.split(":");
+        this.lapTimeMS = Double.parseDouble(lapTimeMinSec[0])*60000 + Double.parseDouble(lapTimeMinSec[1])*1000;
+        this.speed = (3600000*this.lapLength)/lapTimeMS;;
         this.year = year;
     }
-
 
     @Override
     public void printVenue(){
