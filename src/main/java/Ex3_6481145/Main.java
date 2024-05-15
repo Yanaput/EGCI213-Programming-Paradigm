@@ -14,7 +14,6 @@ public class Main {
             while (fileScanner.hasNext()){
                 String[] cols = fileScanner.nextLine().split(",");
                 if(cols[0].equals("m")) {
-                    //MotorRacing(String nm, String vn, int year, double lapLength, double lapTimeMS, double speed)
                     String[] lapTime = cols[5].split(":");
                     double lapTimeMS = Double.parseDouble(lapTime[0])*60000 + Double.parseDouble(lapTime[1])*1000;
                     double distance = Double.parseDouble(cols[4]);
