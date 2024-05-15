@@ -14,13 +14,12 @@ public class Main {
             while (fileScanner.hasNext()){
                 String[] cols = fileScanner.nextLine().split(",");
                 if(cols[0].equals("m")) {
-                    String[] lapTime = cols[5].split(":");
-                    double lapTimeMS = Double.parseDouble(lapTime[0])*60000 + Double.parseDouble(lapTime[1])*1000;
-                    double distance = Double.parseDouble(cols[4]);
-                    races[idx] = new MotorRacing(cols[1].trim(), cols[2].trim(), Integer.parseInt(cols[3].trim()), distance, cols[5]);
+                    races[idx] = new MotorRacing(cols[1].trim(), cols[2].trim(), Integer.parseInt(cols[3].trim()),
+                            Double.parseDouble(cols[4]), cols[5]);
                 }
                 else if(cols[0].equals("h")) {
-                    races[idx] = new HorseRacing(cols[1].trim(), cols[2].trim(), Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim()));
+                    races[idx] = new HorseRacing(cols[1].trim(), cols[2].trim(), Integer.parseInt(cols[3].trim()),
+                            Double.parseDouble(cols[4].trim()));
                 }
                 idx++;
             }
@@ -32,11 +31,11 @@ public class Main {
             for(Racing i:races)
                 if(i instanceof HorseRacing)
                     i.printDetails();
+
             System.out.println("\n=== Only Motor races (input order) ===");
             for(Racing i:races)
                 if(i instanceof MotorRacing)
                     i.printDetails();
-
 
             fileScanner.close();
         }
