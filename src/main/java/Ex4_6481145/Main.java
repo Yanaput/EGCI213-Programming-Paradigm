@@ -42,7 +42,7 @@ class Seafood implements Comparable<Seafood> {
     }
 
     public void print(){
-        System.out.printf("%-24s%-10s%13d%20d%18.3f\n", this.name, this.type, this.omega3, this.cholesterol, this.mercury);
+        System.out.printf("%-24s%-10s%11d%17d%18.3f\n", this.name, this.type, this.omega3, this.cholesterol, this.mercury);
     }
 }
 
@@ -132,6 +132,7 @@ public class Main {
                             if(i instanceof mollusk)
                                 i.print();
                         break;
+
                     default:
                         System.out.println("_".repeat(85));
                         loopRunning = false;
