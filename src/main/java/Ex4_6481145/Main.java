@@ -19,25 +19,19 @@ class Seafood implements Comparable<Seafood> {
     }
 
     public int compareTo(Seafood other) {
-        if(this.omega3 < other.omega3)
-            return 1;
-        else if(this.omega3 > other.omega3)
-            return -1;
-        else{
-            if(this.cholesterol > other.cholesterol)
-                return 1 ;
-            else if(this.cholesterol < other.cholesterol)
-                return -1;
-            else{
-                if(this.mercury > other.mercury)
-                    return 1 ;
-                else if(this.mercury < other.mercury)
-                    return -1;
-                else{
-                    return this.name.compareToIgnoreCase(other.name);
-                }
-            }
-        }
+        int result = Integer.compare(other.omega3, this.omega3);
+        if(result != 0)
+            return result;
+
+        result = Integer.compare(this.cholesterol, other.cholesterol);
+        if(result != 0)
+            return result;
+
+        result = Double.compare(this.mercury, other.mercury);
+        if(result != 0)
+            return  result;
+
+        return  this.name.compareToIgnoreCase(other.name);
     }
 
     public void print(){
@@ -45,27 +39,26 @@ class Seafood implements Comparable<Seafood> {
     }
 }
 
-class fish extends Seafood {
-     public fish(String type,String name,  int omega3, int cholesterol, double mercury){
+class Fish extends Seafood {
+     public Fish(String type, String name, int omega3, int cholesterol, double mercury){
         super(type, name, omega3, cholesterol, mercury);
     }
 }
 
-class crustacean extends Seafood{
-    public crustacean(String type,String name, int omega3, int cholesterol, double mercury){
+class Crustacean extends Seafood{
+    public Crustacean(String type, String name, int omega3, int cholesterol, double mercury){
         super(type, name, omega3, cholesterol, mercury);
     }
 }
 
-class mollusk extends Seafood{
-    public mollusk(String type,String name, int omega3, int cholesterol, double mercury){
+class Mollusk extends Seafood{
+    public Mollusk(String type, String name, int omega3, int cholesterol, double mercury){
         super(type, name, omega3, cholesterol, mercury);
     }
 }
-
 
 public class Main {
-    public static void printFormat(){
+    public static void printHeader(){
         System.out.printf("%-18s%10s%20s%20s%17s\n", "Seafood (3 oz)", "Type", "Omega-3 (mg)", "Cholesterol (mg)", "Mercury (ppm)");
         System.out.println("=".repeat(85));
     }
@@ -80,15 +73,15 @@ public class Main {
                 String readLine = fileScanner.nextLine();
                 String[] cols = readLine.split(",");
                 if(cols[0].equalsIgnoreCase("f")){
-                    seafoodArrayList.add(new fish("fish", cols[1].trim(), Integer.parseInt(cols[2].trim()),
+                    seafoodArrayList.add(new Fish("fish", cols[1].trim(), Integer.parseInt(cols[2].trim()),
                             Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
                 }
                 else if(cols[0].equalsIgnoreCase("c")){
-                    seafoodArrayList.add(new crustacean("crustacean" ,cols[1].trim(), Integer.parseInt(cols[2].trim()),
+                    seafoodArrayList.add(new Crustacean("crustacean" ,cols[1].trim(), Integer.parseInt(cols[2].trim()),
                             Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
                 }
                 else if(cols[0].equalsIgnoreCase("m")){
-                    seafoodArrayList.add(new mollusk("mollusk",cols[1].trim(), Integer.parseInt(cols[2].trim()),
+                    seafoodArrayList.add(new Mollusk("mollusk",cols[1].trim(), Integer.parseInt(cols[2].trim()),
                             Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
                 }
                 else {
@@ -99,42 +92,42 @@ public class Main {
 
             Collections.sort(seafoodArrayList);
             Scanner keyboardScanner = new Scanner(System.in);
-            boolean loopRunning = true;
+            boolean isRunning = true;
 
-            while(loopRunning){
+            while(isRunning){
                 System.out.println("Choose filter -> a =all, f = fish, c = crustacean, m = mollusk, others = quit");
                 String input = keyboardScanner.next();
                 switch (input.toLowerCase()){
                     case "a" :
-                        printFormat();
+                        printHeader();
                         for(Seafood i: seafoodArrayList)
                             i.print();
                         break;
 
                     case "f" :
-                        printFormat();
+                        printHeader();
                         for(Seafood i: seafoodArrayList)
-                            if(i instanceof fish)
+                            if(i instanceof Fish)
                                 i.print();
                         break;
 
                     case "c" :
-                        printFormat();
+                        printHeader();
                         for(Seafood i: seafoodArrayList)
-                            if(i instanceof crustacean)
+                            if(i instanceof Crustacean)
                                 i.print();
                         break;
 
                     case "m" :
-                        printFormat();
+                        printHeader();
                         for(Seafood i: seafoodArrayList)
-                            if(i instanceof mollusk)
+                            if(i instanceof Mollusk)
                                 i.print();
                         break;
 
                     default:
                         System.out.println("_".repeat(85));
-                        loopRunning = false;
+                        isRunning = false;
                         break;
                 }
                 System.out.println();
