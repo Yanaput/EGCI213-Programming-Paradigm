@@ -2,9 +2,7 @@
 package Ex4_6481145;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 class Seafood implements Comparable<Seafood> {
     private String name, type;
@@ -34,105 +32,65 @@ class Seafood implements Comparable<Seafood> {
         return  this.name.compareToIgnoreCase(other.name);
     }
 
-    public void print(){
-        System.out.printf("%-24s%-10s%11d%17d%18.3f\n", this.name, this.type, this.omega3, this.cholesterol, this.mercury);
-    }
-}
-
-class Fish extends Seafood {
-     public Fish(String type, String name, int omega3, int cholesterol, double mercury){
-        super(type, name, omega3, cholesterol, mercury);
-    }
-}
-
-class Crustacean extends Seafood{
-    public Crustacean(String type, String name, int omega3, int cholesterol, double mercury){
-        super(type, name, omega3, cholesterol, mercury);
-    }
-}
-
-class Mollusk extends Seafood{
-    public Mollusk(String type, String name, int omega3, int cholesterol, double mercury){
-        super(type, name, omega3, cholesterol, mercury);
+    public void print(Character selectedType){
+        if(this.type.charAt(0) == selectedType || selectedType == 'a')
+            System.out.printf("%-24s%-10s%11d%17d%18.3f\n",
+                    this.name, this.type, this.omega3, this.cholesterol, this.mercury);
     }
 }
 
 public class Main {
     public static void printHeader(){
-        System.out.printf("%-18s%10s%20s%20s%17s\n", "Seafood (3 oz)", "Type", "Omega-3 (mg)", "Cholesterol (mg)", "Mercury (ppm)");
+        System.out.printf("%-18s%10s%20s%20s%17s\n",
+                "Seafood (3 oz)", "Type", "Omega-3 (mg)", "Cholesterol (mg)", "Mercury (ppm)");
         System.out.println("=".repeat(85));
     }
 
     public static void main(String[] args) {
-        String path = "src/main/java/Ex4_6481145/seafoods.txt";
         try {
-            Scanner fileScanner = new Scanner(new File(path));
+            Scanner fileScanner = new Scanner(new File("src/main/java/Ex4_6481145/seafoods.txt"));
             fileScanner.nextLine();
             ArrayList<Seafood> seafoodArrayList= new ArrayList<Seafood>();
             while(fileScanner.hasNext()){
                 String readLine = fileScanner.nextLine();
                 String[] cols = readLine.split(",");
-                if(cols[0].equalsIgnoreCase("f")){
-                    seafoodArrayList.add(new Fish("fish", cols[1].trim(), Integer.parseInt(cols[2].trim()),
-                            Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
+                String type = "";
+                switch(cols[0].toLowerCase()){
+                    case "f" :
+                        type = "fish";
+                        break;
+                    case "m" :
+                        type = "mollusk";
+                        break;
+                    case "c" :
+                        type = "crustacean";
+                        break;
+                    default :
+                        System.err.println("Unmatched type appear");
+                        break;
                 }
-                else if(cols[0].equalsIgnoreCase("c")){
-                    seafoodArrayList.add(new Crustacean("crustacean" ,cols[1].trim(), Integer.parseInt(cols[2].trim()),
-                            Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
-                }
-                else if(cols[0].equalsIgnoreCase("m")){
-                    seafoodArrayList.add(new Mollusk("mollusk",cols[1].trim(), Integer.parseInt(cols[2].trim()),
-                            Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
-                }
-                else {
-                    System.err.println("Unmatched type");
-                    break;
-                }
+                seafoodArrayList.add(new Seafood(type, cols[1].trim(), Integer.parseInt(cols[2].trim()),
+                        Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
             }
 
             Collections.sort(seafoodArrayList);
             Scanner keyboardScanner = new Scanner(System.in);
-            boolean isRunning = true;
 
-            while(isRunning){
+            while(true){
                 System.out.println("Choose filter -> a =all, f = fish, c = crustacean, m = mollusk, others = quit");
-                String input = keyboardScanner.next();
-                switch (input.toLowerCase()){
-                    case "a" :
-                        printHeader();
-                        for(Seafood i: seafoodArrayList)
-                            i.print();
-                        break;
+                String input = keyboardScanner.next().toLowerCase();
 
-                    case "f" :
-                        printHeader();
-                        for(Seafood i: seafoodArrayList)
-                            if(i instanceof Fish)
-                                i.print();
-                        break;
-
-                    case "c" :
-                        printHeader();
-                        for(Seafood i: seafoodArrayList)
-                            if(i instanceof Crustacean)
-                                i.print();
-                        break;
-
-                    case "m" :
-                        printHeader();
-                        for(Seafood i: seafoodArrayList)
-                            if(i instanceof Mollusk)
-                                i.print();
-                        break;
-
-                    default:
-                        System.out.println("_".repeat(85));
-                        isRunning = false;
-                        break;
+                if((input.equals("a")||input.equals("f")||input.equals("c")||input.equals("m"))){
+                    printHeader();
+                    for(Seafood i: seafoodArrayList)
+                        i.print(input.charAt(0));
+                }
+                else {
+                    System.out.println("_".repeat(85));
+                    break;
                 }
                 System.out.println();
             }
-
             fileScanner.close();
             keyboardScanner.close();
         }
