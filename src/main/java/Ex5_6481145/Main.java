@@ -53,9 +53,9 @@ public class Main {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner keyboardScanner = new Scanner(System.in);
-        String readLine = "", fileName = "seafoods_error.txt";
+        String readLine = "", fileName = "seafoods_errors.";
         boolean fileLoaded = false;
 
         while(!fileLoaded) {
@@ -83,13 +83,11 @@ public class Main {
                         seafoodArrayList.add(new Seafood(type, cols[1].trim(), Integer.parseInt(cols[2].trim()),
                                 Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
                     } catch (NumberFormatException | ArrayIndexOutOfBoundsException | InvalidInputException e) {
-
                         System.err.println(e + "\n" + readLine + "\n");
                     }
                 }
 
                 Collections.sort(seafoodArrayList);
-
 
                 while (true) {
                     System.out.println("Choose filter -> a =all, f = fish, c = crustacean, m = mollusk, others = quit");
@@ -110,6 +108,7 @@ public class Main {
 
             } catch (FileNotFoundException e) {
                 System.err.println(e);
+                Thread.sleep(100); // Delay waiting for System.out to be fully buffered
                 System.out.println("New file name = ");
                 fileName = keyboardScanner.nextLine();
             }
