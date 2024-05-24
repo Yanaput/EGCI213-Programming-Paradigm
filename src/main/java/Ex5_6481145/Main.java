@@ -46,26 +46,24 @@ class  InvalidInputException extends Exception{
 
 
 public class Main {
-    static int fileLoadFailed = 0;
-    public void printHeader(){
+    public static void printHeader(){
         System.out.printf("%-18s%10s%20s%20s%17s\n",
                 "Seafood (3 oz)", "Type", "Omega-3 (mg)", "Cholesterol (mg)", "Mercury (ppm)");
         System.out.println("=".repeat(85));
     }
 
-    public void task(String fileName) {
-        Scanner fileErrorScanner = new Scanner(System.in);
-        String readLine = "";
-        if(fileLoadFailed == 5) {
-            fileErrorScanner.close();
-            System.err.println("Exit the program: failing to load new files for 5 times");
-        }
-        while (fileLoadFailed < 5) {
+
+    public static void main(String[] args) {
+        Scanner keyboardScanner = new Scanner(System.in);
+        String readLine = "", fileName = "seafoods_error.txt";
+        boolean fileLoaded = false;
+
+        while(!fileLoaded) {
             try {
                 Scanner fileScanner = new Scanner(new File("src/main/java/Ex5_6481145/" + fileName));
+                fileLoaded = true;
                 fileScanner.nextLine();
                 ArrayList<Seafood> seafoodArrayList = new ArrayList<Seafood>();
-
                 while (fileScanner.hasNext()) {
                     try {
                         readLine = fileScanner.nextLine();
@@ -80,19 +78,18 @@ public class Main {
                         for (int i = 2; i < cols.length; i++) {
                             if (Double.parseDouble(cols[i].trim()) < 0)
                                 throw new InvalidInputException(": For input :\"" + cols[i].trim() + "\"");
-
                         }
 
                         seafoodArrayList.add(new Seafood(type, cols[1].trim(), Integer.parseInt(cols[2].trim()),
                                 Integer.parseInt(cols[3].trim()), Double.parseDouble(cols[4].trim())));
                     } catch (NumberFormatException | ArrayIndexOutOfBoundsException | InvalidInputException e) {
 
-                        System.err.println(e+"\n"+readLine + "\n");
+                        System.err.println(e + "\n" + readLine + "\n");
                     }
                 }
 
                 Collections.sort(seafoodArrayList);
-                Scanner keyboardScanner = new Scanner(System.in);
+
 
                 while (true) {
                     System.out.println("Choose filter -> a =all, f = fish, c = crustacean, m = mollusk, others = quit");
@@ -110,24 +107,12 @@ public class Main {
                 }
                 fileScanner.close();
                 keyboardScanner.close();
+
             } catch (FileNotFoundException e) {
                 System.err.println(e);
-                for(int i = 0; i < 10000; i++){} //delay for printing exception
-                fileLoadFailed++;
                 System.out.println("New file name = ");
-                fileName = fileErrorScanner.nextLine();
-                task(fileName);
-            } catch (Exception e) {
-                System.err.println(e);
-            } finally {
-                fileErrorScanner.close();
+                fileName = keyboardScanner.nextLine();
             }
         }
-    }
-
-
-    public static void main(String[] args) {
-        Main mainApp = new Main();
-        mainApp.task("seafood_error.txt");
     }
 }
