@@ -5,29 +5,30 @@ import java.util.*;
 import java.io.*;
 
 
-
 class PrimeThread extends Thread {
     private PrintWriter out;
     private ArrayList<Integer> numbers = new ArrayList<>();
     private int totalPrime, target, rounds ;
     public PrimeThread(String name, int target) { super(name); this.target = target; }
     public boolean isPrime(int value){
-        for(int i = 2; i*i <= value ; i++){
-            if(value % i == 0)
-                return false;
+        if(value % 2 == 0) return false;
+
+        for(int i = 3; i <= Math.sqrt(value); i += 2){
+            if(value % i == 0) return false;
         }
+
         return true;
     }
 
     @Override
     public void run(){
-        String fileName = "src/main/java/Ex6_6481145/output"+this.getName()+".txt";
+        String fileName = "src/main/java/Ex6_6481145/output" + this.getName() + ".txt";
         try{
             out = new PrintWriter(fileName);
             out.printf("%-10s, target = %d\n",this.getName(), this.target);
             while(totalPrime < target){
                 rounds++;
-                out.printf("Round%4d >>", rounds);
+                out.printf("Round%4d  >>  ", rounds);
 
                 for (int i = 0; i < 5; i++)
                     numbers.add(new Random().nextInt(2,101));
@@ -45,7 +46,7 @@ class PrimeThread extends Thread {
                 numbers.clear();
                 out.printf("%20s%6d\n", "total prime = ", totalPrime);
             }
-            System.out.println(this.getName()+" finished in "+ rounds +" rounds");
+            System.out.println(this.getName()+" finished in " + rounds + " rounds");
             this.out.close();
         }
         catch(Exception e){
