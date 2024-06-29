@@ -55,7 +55,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         Scanner keyboardScanner = new Scanner(System.in);
-        String readLine = "", fileName = "seafoods_errors.";
+        String readLine = "", fileName = "seafoods_errors.txt";
         boolean fileLoaded = false;
 
         while(!fileLoaded) {
@@ -63,7 +63,7 @@ public class Main {
                 Scanner fileScanner = new Scanner(new File("src/main/java/Ex5_6481145/" + fileName));
                 fileLoaded = true;
                 fileScanner.nextLine();
-                ArrayList<Seafood> seafoodArrayList = new ArrayList<Seafood>();
+                ArrayList<Seafood> seafoodArrayList = new ArrayList<>();
                 while (fileScanner.hasNext()) {
                     try {
                         readLine = fileScanner.nextLine();

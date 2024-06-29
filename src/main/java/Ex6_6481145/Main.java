@@ -71,6 +71,5 @@ public class Main {
 
         for(PrimeThread thread: threads)
             thread.start();
-
     }
 }
