@@ -1,4 +1,4 @@
-// Don't forget to rename the package
+//Yanaput Makbonsonglop 6481145
 package Ex8_6481145;
 
 import javax.swing.*;
