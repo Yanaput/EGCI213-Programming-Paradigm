@@ -83,7 +83,6 @@ class MainApplication extends JFrame implements KeyListener
 
     @Override
     public void keyPressed (KeyEvent e){
-        System.out.printf("p >>  %c (%s)\n", e.getKeyChar(), KeyEvent.getKeyText(e.getKeyCode()));
         switch (e.getKeyChar()){
             case 'c' :
                 setCat();
@@ -99,23 +98,18 @@ class MainApplication extends JFrame implements KeyListener
 
         switch (KeyEvent.getKeyText(e.getKeyCode())){
             case "Up" :
-                System.out.println("up");
                 getActiveLabel().moveUp();
                 break;
             case "Left" :
-                System.out.println("left");
                 getActiveLabel().moveLeft();
                 break;
             case "Right" :
-                System.out.println("right");
                 getActiveLabel().moveRight();
                 break;
             case "Down" :
-                System.out.println("down");
                 getActiveLabel().moveDown();
                 break;
             case "Escape" :
-                System.out.println("esc");
                 getActiveLabel().removeWings();
                 break;
         }
@@ -193,9 +187,7 @@ class CharacterLabel extends BaseLabel
         }
     }
     public void moveUp(){
-        if(hasWings){
-            System.out.println(this.curY);
-            this.curY -= 20;
+        if(hasWings){this.curY -= 20;
             if(this.curY <= - 20){
                 this.curY = MyConstants.FRAMEHEIGHT - 120;
             }
@@ -204,9 +196,7 @@ class CharacterLabel extends BaseLabel
         updateLocation();
     }
 
-    public void moveDown(){
-        System.out.println(this.curY);
-        if(hasWings){
+    public void moveDown(){if(hasWings){
             this.curY += 20;
             if(this.curY >= MyConstants.FRAMEHEIGHT - 120){
                 this.curY = 0;
@@ -219,17 +209,13 @@ class CharacterLabel extends BaseLabel
     public void moveLeft(){
         this.curX -= 10;
         if(this.curX <= 0)
-            this.curX = MyConstants.FRAMEWIDTH - 120;
-        System.out.println(this.curX);
-        updateLocation();
+            this.curX = MyConstants.FRAMEWIDTH - 120;updateLocation();
     }
 
     public void moveRight(){
         this.curX += 10;
         if(this.curX >= MyConstants.FRAMEWIDTH - 120)
             this.curX = 0;
-        System.out.println(this.curX);
-
         updateLocation();
     }
 
@@ -299,7 +285,6 @@ class ItemLabel extends BaseLabel implements MouseListener, MouseMotionListener
     @Override
     public void mouseDragged(MouseEvent e) {
         if(drag){
-            System.out.println("Drag");
             this.curX = this.curX + e.getX();
             this.curY = this.curY + e.getY();
 
@@ -335,13 +320,11 @@ class ItemLabel extends BaseLabel implements MouseListener, MouseMotionListener
     @Override
     public void mousePressed(MouseEvent e) {
         drag = true;
-        System.out.println("clicked");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         drag = false;
-        System.out.println("Release");
     }
 
     @Override
