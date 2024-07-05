@@ -179,7 +179,7 @@ class MainApplication extends JFrame
         }
 
 
-        
+
         // (6) Add ActionListener (anonymous class) to moreButton
         //     - Create a new itemThread that controls balloon/heart/rock
 	    moreButton = new JButton("More Balloon");
@@ -229,6 +229,15 @@ class MainApplication extends JFrame
     }
     //--------------------------------------------------------------------------
     public void setItemThread() {
+        // (7) Create a new ItemLabel & add it to drawpane
+        //     Loop:
+        //     - If the item is balloon, don't update location but check
+        //       whether it collides with Bird. If it does, change image
+        //       to heart/rock, play hit sound, update score
+        //
+        //     - If the item is now heart/rock, update its location. No
+        //       need to check collision any more. Once reaching the
+        //       top/bottom, remove it from drawpane and end this thread
         Thread itemThread = new Thread() {
             public void run()
             {
@@ -240,7 +249,7 @@ class MainApplication extends JFrame
                         if(item.getBounds().intersects((item.getParentFrame().birdLabel.getBounds()))){
                             item.playHitSound();
                             item.setIcon(item.getSecretImg());
-                            updateScore(item.hitpoints[item.getType()]);
+                            updateScore(item.getHitPoints());
                             item.setHit(true);
                         }
                     }
@@ -261,18 +270,8 @@ class MainApplication extends JFrame
                     }catch (Exception e){
                         System.err.println(e);
                     }
-
                 }
 
-                // (7) Create a new ItemLabel & add it to drawpane
-                //     Loop:
-                //     - If the item is balloon, don't update location but check
-                //       whether it collides with Bird. If it does, change image
-                //       to heart/rock, play hit sound, update score
-                //
-                //     - If the item is now heart/rock, update its location. No
-                //       need to check collision any more. Once reaching the
-                //       top/bottom, remove it from drawpane and end this thread
 
             } // end run
         }; // end thread creation
@@ -282,9 +281,9 @@ class MainApplication extends JFrame
     //--------------------------------------------------------------------------
     synchronized public void updateScore(int scoreUpdate)
     {
+        // (8) Score update must be synchronized since it can be done by >1 itemThreads
         score += scoreUpdate;
         scoreText.setText(Integer.toString(score));
-        // (8) Score update must be synchronized since it can be done by >1 itemThreads
 
     }  
     
@@ -307,7 +306,6 @@ class BirdLabel extends JLabel
     public BirdLabel(MainApplication pf)
     {
         parentFrame = pf;
-            
         leftImg  = new MyImageIcon(MyConstants.FILE_BIRD_LEFT).resize(width, height);
         rightImg = new MyImageIcon(MyConstants.FILE_BIRD_RIGHT).resize(width, height);
         setIcon(rightImg);
@@ -322,13 +320,11 @@ class BirdLabel extends JLabel
         
     public void updateLocation()
     {
-        if (!right)
-        {   
+        if (!right) {
             curX = curX - 50;
             if (curX < -100) { curX = parentFrame.getWidth(); } 			
         }
-        else
-        {
+        else {
             curX = curX + 50;
             if (curX > parentFrame.getWidth()-100) { curX = 0; }			
         }
